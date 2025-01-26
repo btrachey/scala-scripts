@@ -14,6 +14,25 @@ trait ScriptModule extends ScalaNativeModule with ScalafixModule {
   def scalaVersion = "3.3.4"
   def scalaNativeVersion = "0.5.6"
   def ivyDeps = Agg(ivy"com.github.alexarchambault::case-app::2.1.0-M29")
+  def executableName: String
+  // rename the default `out` executable to `executableName`
+  def linkRename = T {
+    val nativeLinkPath = nativeLink()
+    val destPath = nativeLinkPath/".."/executableName
+    val move = os.move(nativeLinkPath, destPath)
+    destPath
+  }
+  def nativeIncrementalCompilation= true
+  def releaseMode= {
+    val isCI = sys.env.getOrElse("CI", "false") match {
+      case "true" => true
+      case _ => false
+    }
+    isCI match {
+      case true =>  ReleaseMode.ReleaseFull
+      case false => ReleaseMode.ReleaseFast
+    }
+  }
 
   object test extends ScalaNativeTests {
     def ivyDeps = Agg(ivy"com.lihaoyi::utest::0.8.4")
@@ -25,22 +44,5 @@ trait ScriptModule extends ScalaNativeModule with ScalafixModule {
 object fsp extends ScriptModule {
   def ivyDeps = super.ivyDeps() ++ Agg(ivy"com.lihaoyi::os-lib::0.11.3")
   def mainClass = Some("fsp.Main")
-  val executableName = "find-scala-projects"
-  def linkRename = T {
-    val nativeLinkPath = nativeLink()
-    val destPath = nativeLinkPath/".."/executableName
-    val move = os.move(nativeLinkPath, destPath)
-    destPath
-  }
-  override def nativeIncrementalCompilation: T[Boolean] = true
-  override def releaseMode: T[ReleaseMode] = {
-    val isCI = sys.env.getOrElse("CI", "false") match {
-      case "true" => true
-      case _ => false
-    }
-    isCI match {
-      case true =>  ReleaseMode.ReleaseFull
-      case false => ReleaseMode.ReleaseFast
-    }
-  }
+  def executableName = "find-scala-projects"
 }
