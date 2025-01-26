@@ -25,6 +25,22 @@ trait ScriptModule extends ScalaNativeModule with ScalafixModule {
 object fsp extends ScriptModule {
   def ivyDeps = super.ivyDeps() ++ Agg(ivy"com.lihaoyi::os-lib::0.11.3")
   def mainClass = Some("fsp.Main")
+  val executableName = "find-scala-projects"
+  def linkRename = T {
+    val nativeLinkPath = nativeLink()
+    val destPath = nativeLinkPath/".."/executableName
+    val move = os.move(nativeLinkPath, destPath)
+    destPath
+  }
   override def nativeIncrementalCompilation: T[Boolean] = true
-  override def releaseMode: T[ReleaseMode] = ReleaseMode.ReleaseFull
+  override def releaseMode: T[ReleaseMode] = {
+    val isCI = sys.env.getOrElse("CI", "false") match {
+      case "true" => true
+      case _ => false
+    }
+    isCI match {
+      case true =>  ReleaseMode.ReleaseFull
+      case false => ReleaseMode.ReleaseFast
+    }
+  }
 }

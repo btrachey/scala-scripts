@@ -1,4 +1,6 @@
 name: Build & Publish
+env:
+  CI: true
 on:
   push:
     # tags:
@@ -8,9 +10,10 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
-      - run: ./mill show fsp.nativeLink
+      - run: echo "exec_name=$(./mill show fsp.linkRename 2>/dev/null)" >> $GITHUB_OUTPUT
+        id: get-name
       - uses: actions/upload-artifact@v4
         with:
           name: find-scala-projects
-          path: ./out/fsp/nativeLink.dest/out
+          path: steps.get-name.outputs.exec_name
           overwrite: true
