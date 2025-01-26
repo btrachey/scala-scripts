@@ -1,0 +1,27 @@
+package build
+
+// format: off 
+import $ivy.`com.goyeau::mill-scalafix::0.4.2`
+import com.goyeau.mill.scalafix.ScalafixModule
+import mill._
+
+import scalalib._
+import scalanativelib._
+// format: on
+
+trait ScriptModule extends ScalaNativeModule with ScalafixModule {
+  def scalaVersion = "3.3.4"
+  def scalaNativeVersion = "0.5.6"
+  def ivyDeps = Agg(ivy"com.github.alexarchambault::case-app::2.1.0-M29")
+
+  object test extends ScalaNativeTests {
+    def ivyDeps = Agg(ivy"com.lihaoyi::utest::0.8.4")
+    def testFramework = "utest.runner.Framework"
+  }
+}
+
+// fsp stands for "find scala projects"
+object fsp extends ScriptModule {
+  def ivyDeps = super.ivyDeps() ++ Agg(ivy"com.lihaoyi::os-lib::0.11.3")
+  def mainClass = Some("fsp.Main")
+}
