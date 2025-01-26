@@ -9,6 +9,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: ./mill show fsp.nativeLink
+      - run: ls -l ./out/fsp/nativeLink.dest/out
       - uses: actions/upload-artifact@v4
         with:
           name: find-scala-projects
