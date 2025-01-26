@@ -7,4 +7,4 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "hello there"
+      - run: ./mill show fsp.nativeLink
