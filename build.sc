@@ -1,14 +1,14 @@
-import mill.scalanativelib.api.ReleaseMode
 package build
 
-// scalafix: off 
+// scalafix:off
 import $ivy.`com.goyeau::mill-scalafix::0.4.2`
 import com.goyeau.mill.scalafix.ScalafixModule
 import mill._
+import mill.scalanativelib.api.ReleaseMode
 
 import scalalib._
 import scalanativelib._
-// scalafix: on
+// scalafix:on
 
 trait ScriptModule extends ScalaNativeModule with ScalafixModule {
   def scalaVersion = "3.3.4"
