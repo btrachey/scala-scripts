@@ -17,11 +17,11 @@ case class Options(
     @Name("d")
     startDir: Option[String] = None,
     @HelpMessage(
-      "Limit the depth of folders to search."
+      "Limit the depth of folders to search; arbitrary default of 5."
     )
     @ValueDescription("number")
     @Name("m")
-    maxFolderDepth: Int
+    maxFolderDepth: Int = 5
 )
 
 object MyApp extends Command[Options] {
