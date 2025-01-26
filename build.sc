@@ -1,13 +1,14 @@
+import mill.scalanativelib.api.ReleaseMode
 package build
 
-// format: off 
+// scalafix: off 
 import $ivy.`com.goyeau::mill-scalafix::0.4.2`
 import com.goyeau.mill.scalafix.ScalafixModule
 import mill._
 
 import scalalib._
 import scalanativelib._
-// format: on
+// scalafix: on
 
 trait ScriptModule extends ScalaNativeModule with ScalafixModule {
   def scalaVersion = "3.3.4"
@@ -24,4 +25,6 @@ trait ScriptModule extends ScalaNativeModule with ScalafixModule {
 object fsp extends ScriptModule {
   def ivyDeps = super.ivyDeps() ++ Agg(ivy"com.lihaoyi::os-lib::0.11.3")
   def mainClass = Some("fsp.Main")
+  override def nativeIncrementalCompilation: T[Boolean] = true
+  override def releaseMode: T[ReleaseMode] = ReleaseMode.ReleaseFull
 }
