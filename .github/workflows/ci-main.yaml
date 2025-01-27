@@ -10,7 +10,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
-      - run: ./mill --ticker false --disable-prompt showNamed fsp.linkRename
+      - run: ./mill --ticker false --disable-prompt showNamed fsp.linkRename 2>/dev/null
       # - run: echo "exec_name=$(./mill --disable-prompt showNamed fsp.linkRename 2>/dev/null | jq  '."fsp.linkRename"')" >> $GITHUB_OUTPUT
       #   id: get-name
       # - uses: actions/upload-artifact@v4
