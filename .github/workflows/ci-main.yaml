@@ -1,6 +1,6 @@
 name: Build & Publish
-env:
-  CI: true
+# env:
+#   CI: true
 on:
   push:
     # tags:
