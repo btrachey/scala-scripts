@@ -1,5 +1,3 @@
-package build
-
 // scalafix:off
 import $ivy.`com.goyeau::mill-scalafix::0.4.2`
 import com.goyeau.mill.scalafix.ScalafixModule
