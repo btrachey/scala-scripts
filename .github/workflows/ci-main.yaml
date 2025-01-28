@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: "btrachey/mill"
-          # ref: "native-module-stderr-logging"
+          ref: "native-module-stderr-logging"
           path: "alt/mill"
       - run: cd alt/mill && ./mill dist.installLocalCache
       - uses: actions/checkout@v4
