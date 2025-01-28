@@ -1,6 +1,7 @@
 name: Build & Publish
-# env:
-#   CI: true
+env:
+  # tells the build to do full link optimization
+  CI: true
 on:
   push:
     # tags:

@@ -16,20 +16,17 @@ trait ScriptModule extends ScalaNativeModule with ScalafixModule {
   // rename the default `out` executable to `executableName`
   def linkRename = T {
     val nativeLinkPath = nativeLink()
-    val destPath = nativeLinkPath/".."/executableName
+    val destPath = nativeLinkPath / ".." / executableName
     val move = os.move(nativeLinkPath, destPath)
     destPath
   }
-  def nativeIncrementalCompilation= true
-  def releaseMode= {
-    val isCI = sys.env.getOrElse("CI", "false") match {
-      case "true" => true
-      case _ => false
-    }
-    isCI match {
-      case true =>  ReleaseMode.ReleaseFull
-      case false => ReleaseMode.ReleaseFast
-    }
+  def nativeIncrementalCompilation = true
+  def releaseMode = (sys.env.getOrElse("CI", "false") match {
+    case "true" => true
+    case _      => false
+  }) match {
+    case true  => ReleaseMode.ReleaseFull
+    case false => ReleaseMode.ReleaseFast
   }
 
   object test extends ScalaNativeTests {
