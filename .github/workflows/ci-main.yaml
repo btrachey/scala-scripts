@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           repository: "btrachey/mill"
-          path: "alt"
+          path: "alt/mill"
       - run: cd alt/mill && ./mill dist.installLocalCache
       - uses: actions/checkout@v4
       # - run: ./mill showNamed fsp.linkRename 2>/dev/null
