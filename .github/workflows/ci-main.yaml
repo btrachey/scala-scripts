@@ -11,8 +11,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       # - run: ./mill showNamed fsp.linkRename 2>/dev/null
-      # - run: echo "exec_name=$(./mill2 showNamed fsp.jar | jq -r '."fsp.jar"')" >> $GITHUB_OUTPUT
-      - run: echo "exec_name=$(./mill2 showNamed fsp.linkRename 2>/dev/null | jq -r '."fsp.linkRename"')" >> $GITHUB_OUTPUT
+      - run: echo "exec_name=$(./mill2 showNamed fsp.jar | jq -r '."fsp.jar"')" >> $GITHUB_OUTPUT
+      # - run: echo "exec_name=$(./mill2 showNamed fsp.linkRename 2>/dev/null | jq -r '."fsp.linkRename"')" >> $GITHUB_OUTPUT
         id: get-name
       - run: echo "${{ steps.get-name.outputs.exec_name }}"
       # - uses: actions/upload-artifact@v4
