@@ -10,19 +10,14 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
+      # `get-name` won't work until https://github.com/com-lihaoyi/mill/pull/4418 is released
+      # instead, manually pass the path into the upload-artifact action
+      # - id: get-name
+      #   run: echo "bin_name=$(./mill showNamed fsp.linkRename | jq -r '."fsp.linkRename"')" >> $GITHUB_OUTPUT
+      - run: ./mill show fsp.linkRename
+      - uses: actions/upload-artifact@v4
         with:
-          repository: "btrachey/mill"
-          ref: "native-module-stderr-logging"
-          path: "alt/mill"
-      - run: cd alt/mill && ./mill dist.installLocalCache
-      - uses: actions/checkout@v4
-      # - run: ./mill showNamed fsp.linkRename 2>/dev/null
-      # - run: echo "exec_name=$(~/.cache/mill/download/SNAPSHOT showNamed fsp.jar | jq -r '."fsp.jar"')" >> $GITHUB_OUTPUT
-      - run: echo "exec_name=$(~/.cache/mill/download/SNAPSHOT showNamed fsp.linkRename | jq -r '."fsp.linkRename"')" >> $GITHUB_OUTPUT
-        id: get-name
-      - run: echo "${{ steps.get-name.outputs.exec_name }}"
-      # - uses: actions/upload-artifact@v4
-      #   with:
-      #     name: find-scala-projects
-      #     path: ${{ steps.get-name.outputs.exec_name }}
-      #     overwrite: true
+          name: find-scala-projects
+          # path: ${{ steps.get-name.outputs.exec_name }}
+          path: out/fsp/nativeLink.dest/find-scala-projects
+          overwrite: true
