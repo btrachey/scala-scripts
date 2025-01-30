@@ -14,11 +14,11 @@ jobs:
       # `get-name` won't work until https://github.com/com-lihaoyi/mill/pull/4418 is released
       # instead, manually pass the path into the upload-artifact action
       # - id: get-name
-      #   run: echo "bin_name=$(./mill showNamed fsp.linkRename | jq -r '."fsp.linkRename"')" >> $GITHUB_OUTPUT
-      - run: ./mill show fsp.linkRename
+      #   run: echo "bin_name=$(./mill showNamed find.linkRename | jq -r '."find.linkRename"')" >> $GITHUB_OUTPUT
+      - run: ./mill show find.linkRename
       - uses: actions/upload-artifact@v4
         with:
           name: find-scala-projects
           # path: ${{ steps.get-name.outputs.exec_name }}
-          path: out/fsp/nativeLink.dest/find-scala-projects
+          path: out/find/nativeLink.dest/find-projects
           overwrite: true

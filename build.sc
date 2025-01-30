@@ -35,9 +35,8 @@ trait ScriptModule extends ScalaNativeModule with ScalafixModule {
   }
 }
 
-// fsp stands for "find scala projects"
-object fsp extends ScriptModule {
+object find extends ScriptModule {
   def ivyDeps = super.ivyDeps() ++ Agg(ivy"com.lihaoyi::os-lib::0.11.3")
-  def mainClass = Some("fsp.Main")
-  def executableName = "find-scala-projects"
+  def mainClass = Some("find.Main")
+  def executableName = "find-projects"
 }
