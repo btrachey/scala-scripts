@@ -36,7 +36,17 @@ trait ScriptModule extends ScalaNativeModule with ScalafixModule {
 }
 
 object find extends ScriptModule {
-  def ivyDeps = super.ivyDeps() ++ Agg(ivy"com.lihaoyi::os-lib::0.11.3")
+  def ivyDeps = super.ivyDeps() ++ Agg(
+    ivy"com.lihaoyi::os-lib::0.11.3",
+    ivy"com.lihaoyi::upickle::4.1.0"
+  )
   def mainClass = Some("find.Main")
   def executableName = "find-projects"
+}
+
+object sc extends ScriptModule {
+  def ivyDeps = super.ivyDeps() ++ Agg(
+    ivy"com.lihaoyi::os-lib::0.11.3"
+  )
+  def executableName = "sc"
 }

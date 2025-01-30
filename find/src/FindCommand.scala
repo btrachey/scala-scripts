@@ -1,6 +1,8 @@
 package find
 
 import caseapp.*
+import upickle.default.*
+import upickle.*
 
 trait FindCommand extends Command[Options] {
   val projectIdentifierFiles: Seq[String]
@@ -20,7 +22,13 @@ trait FindCommand extends Command[Options] {
         maxDepth = maxFolderDepth
       )
       .filter(p => projectIdentifierFiles.contains(p.last))
-    val projectDirs = projectFiles.map(_ / "..")
-    println(projectDirs.mkString("\n"))
+    val projects = projectFiles
+      .map(p => {
+        val path = p / ".."
+        val buildFile = p.last
+        Project(path.toString, buildFile)
+      })
+      .toSeq
+    println(write(projects))
   }
 }

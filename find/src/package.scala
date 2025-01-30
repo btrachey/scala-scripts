@@ -1,4 +1,10 @@
 package object find {
+  import upickle.default.{ReadWriter => RW, macroRW}
+
+  object Project {
+    implicit val rw: RW[Project] = macroRW
+  }
+  case class Project(path: String, buildFile: String)
   object Definitions {
     trait FileIdentifiers {
       val projectIdentifierFiles: Seq[String]
