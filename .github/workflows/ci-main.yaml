@@ -6,6 +6,9 @@ on:
   push:
     # tags:
     #   - v*
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
 jobs:
   build:
     runs-on: macos-latest
@@ -15,10 +18,16 @@ jobs:
       # instead, manually pass the path into the upload-artifact action
       # - id: get-name
       #   run: echo "bin_name=$(./mill showNamed find.linkRename | jq -r '."find.linkRename"')" >> $GITHUB_OUTPUT
-      - run: ./mill show find.linkRename
+      - run: ./mill show _.linkRename
       - uses: actions/upload-artifact@v4
         with:
-          name: find-scala-projects
+          name: find-projects
           # path: ${{ steps.get-name.outputs.exec_name }}
           path: out/find/nativeLink.dest/find-projects
+          overwrite: true
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sc
+          # path: ${{ steps.get-name.outputs.exec_name }}
+          path: out/find/sc.dest/sc
           overwrite: true
