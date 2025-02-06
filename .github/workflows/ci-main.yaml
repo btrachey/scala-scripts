@@ -29,5 +29,5 @@ jobs:
         with:
           name: sc
           # path: ${{ steps.get-name.outputs.exec_name }}
-          path: out/find/sc.dest/sc
+          path: out/sc/nativeLink.dest/sc
           overwrite: true

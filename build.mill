@@ -1,3 +1,5 @@
+package build
+
 // scalafix:off
 import $ivy.`com.goyeau::mill-scalafix::0.4.2`
 import com.goyeau.mill.scalafix.ScalafixModule
@@ -8,7 +10,10 @@ import scalalib._
 import scalanativelib._
 // scalafix:on
 
-trait ScriptModule extends ScalaNativeModule with ScalafixModule {
+trait ScriptModule
+    extends RootModule
+    with ScalaNativeModule
+    with ScalafixModule {
   def scalaVersion = "3.3.4"
   def scalaNativeVersion = "0.5.6"
   def ivyDeps = Agg(ivy"com.github.alexarchambault::case-app::2.1.0-M29")
