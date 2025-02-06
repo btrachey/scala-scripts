@@ -1,8 +1,8 @@
 package find
 
 import caseapp.*
-import upickle.default.*
 import upickle.*
+import upickle.default.*
 
 trait FindCommand extends Command[Options] {
   val projectIdentifierFiles: Seq[String]
