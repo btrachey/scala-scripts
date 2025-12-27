@@ -9,26 +9,28 @@ object Main {
   }
   case class ScalaProject(buildFiles: Seq[String], replCommand: String)
   def main(args: Array[String]): Unit = {
-    val projects = os
-      .list(os.pwd)
-      .map(p => {
-        p.last match {
-          case sbt if ScalaProject.sbt.buildFiles.contains(sbt) =>
-            Some(ScalaProject.sbt)
-          case mill if ScalaProject.mill.buildFiles.contains(mill) =>
-            Some(ScalaProject.mill)
-          case scli if ScalaProject.cli.buildFiles.contains(scli) =>
-            Some(ScalaProject.cli)
-          case _ => None
-        }
-      })
-      .flatten
-      .toSet
+    val projects =
+      os.list(os.pwd)
+        .map(p => {
+          p.last match {
+            case sbt if ScalaProject.sbt.buildFiles.contains(sbt) =>
+              Some(ScalaProject.sbt)
+            case mill if ScalaProject.mill.buildFiles.contains(mill) =>
+              Some(ScalaProject.mill)
+            case scli if ScalaProject.cli.buildFiles.contains(scli) =>
+              Some(ScalaProject.cli)
+            case _ =>
+              None
+          }
+        })
+        .flatten
+        .toSet
     projects.size match {
       case 1 =>
         os.proc(projects.head.replCommand.split(" "))
           .call(stdin = os.Inherit, stdout = os.Inherit, stderr = os.Inherit)
-      case _ => sys.exit(1)
+      case _ =>
+        sys.exit(1)
     }
   }
 }

@@ -1,6 +1,5 @@
 package build
 
-// scalafix:off
 import $ivy.`com.goyeau::mill-scalafix::0.4.2`
 import com.goyeau.mill.scalafix.ScalafixModule
 import mill._
@@ -8,12 +7,30 @@ import mill.scalanativelib.api.ReleaseMode
 
 import scalalib._
 import scalanativelib._
-// scalafix:on
+
+object Deps {
+  object V {
+    val scalaVersion = "3.3.4"
+    val scalaNativeVersion = "0.5.6"
+    val caseApp = "2.1.0-M29"
+    val osLib = "0.11.3"
+    val utest = "0.8.4"
+    val upickle = "4.1.0"
+  }
+  object Test {
+    val utest = ivy"com.lihaoyi::utest::${V.utest}"
+    val all = Agg(utest)
+  }
+  val caseApp = ivy"com.github.alexarchambault::case-app::${V.caseApp}"
+  val osLib = ivy"com.lihaoyi::os-lib::${V.osLib}"
+  val upickle = ivy"com.lihaoyi::upickle::${V.upickle}"
+  val all = Agg(caseApp, osLib)
+}
 
 trait ScriptModule extends ScalaNativeModule with ScalafixModule {
-  def scalaVersion = "3.3.4"
-  def scalaNativeVersion = "0.5.6"
-  def ivyDeps = Agg(ivy"com.github.alexarchambault::case-app::2.1.0-M29")
+  def scalaVersion = Deps.V.scalaVersion
+  def scalaNativeVersion = Deps.V.scalaNativeVersion
+  def ivyDeps = Deps.all
   def executableName: String
   // rename the default `out` executable to `executableName`
   def linkRename = T {
@@ -23,32 +40,26 @@ trait ScriptModule extends ScalaNativeModule with ScalafixModule {
     destPath
   }
   def nativeIncrementalCompilation = true
-  def releaseMode = (sys.env.getOrElse("CI", "false") match {
-    case "true" => true
-    case _      => false
-  }) match {
-    case true  => ReleaseMode.ReleaseFull
-    case false => ReleaseMode.ReleaseFast
-  }
+  def releaseMode =
+    sys.env.getOrElse("CI", "false").toLowerCase() match {
+      case "true" =>
+        ReleaseMode.ReleaseFull
+      case _ =>
+        ReleaseMode.ReleaseFast
+    }
 
   object test extends ScalaNativeTests {
-    def ivyDeps = Agg(ivy"com.lihaoyi::utest::0.8.4")
+    def ivyDeps = Deps.Test.all
     def testFramework = "utest.runner.Framework"
   }
 }
 
 object find extends ScriptModule {
-  def ivyDeps = super.ivyDeps() ++ Agg(
-    ivy"com.lihaoyi::os-lib::0.11.3",
-    ivy"com.lihaoyi::upickle::4.1.0"
-  )
+  def ivyDeps = super.ivyDeps() ++ Agg(Deps.upickle)
   def mainClass = Some("find.Main")
   def executableName = "find-projects"
 }
 
 object sc extends ScriptModule {
-  def ivyDeps = super.ivyDeps() ++ Agg(
-    ivy"com.lihaoyi::os-lib::0.11.3"
-  )
   def executableName = "sc"
 }

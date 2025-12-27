@@ -9,26 +9,29 @@ trait FindCommand extends Command[Options] {
   def run(config: Options, rem: RemainingArgs): Unit = {
     val startDir = config.startDir
     val maxFolderDepth = config.maxFolderDepth
-    val projectFiles = os.walk
+    val projectFiles = os
+      .walk
       .stream(
         startDir.map(os.home / _).getOrElse(os.home),
-        skip = p =>
-          os.stat
-            .posix(p, followLinks = false)
-            .permissions
-            .toString()
-            .take(4)
-            .last != 'r',
+        skip =
+          p =>
+            os.stat
+              .posix(p, followLinks = false)
+              .permissions
+              .toString()
+              .take(4)
+              .last != 'r',
         maxDepth = maxFolderDepth
       )
       .filter(p => projectIdentifierFiles.contains(p.last))
-    val projects = projectFiles
-      .map(p => {
-        val path = p / ".."
-        val buildFile = p.last
-        Project(path.toString, buildFile)
-      })
-      .toSeq
+    val projects =
+      projectFiles
+        .map(p => {
+          val path = p / ".."
+          val buildFile = p.last
+          Project(path.toString, buildFile)
+        })
+        .toSeq
     println(write(projects))
   }
 }
